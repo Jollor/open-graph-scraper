@@ -133,52 +133,22 @@ exports.getOG = function(options, callback) {
 				var attrs = meta[key].attribs;
 
 				if (attrs.property) {
-					if (attrs.property === 'og:title') {
-						ogObject.ogTitle = meta[key].attribs.content;
-					};
-
-					if (attrs.property === 'og:type') {
-						ogObject.ogType = meta[key].attribs.content;
-					};
-
-					if (attrs.property === 'og:image') {
-						ogObject.ogImage = meta[key].attribs.content;
-					};
-
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:url'){
-						ogObject.ogUrl = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:audio'){
-						ogObject.ogAudio = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:description'){
-						ogObject.ogDescription = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:determiner'){
-						ogObject.ogDeterminer = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale'){
-						ogObject.ogLocale = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale:alternate'){
-						ogObject.ogLocaleAlternate = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:site_name'){
-						ogObject.ogSiteName = meta[key].attribs.content;
-					};
-					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:video'){
-						ogObject.ogVideo = meta[key].attribs.content;
-					};
+					var parts = attrs.property.split(':');
+					if (parts.length > 1 && parts[0] == 'og') {
+						parts.shift();
+						var name = parts.join(':');
+						ogObject[name] = attrs.content;
+					}
 				}
 
-				if (!ogObject.ogDescription && attrs.name == 'description') {
-					ogObject.ogDescription = attrs.content;
+				if (!ogObject.description && attrs.name == 'description') {
+					ogObject.description = attrs.content;
 				}
 			});
 
 			// Get title tag if og:title not provided
-			if (!ogObject.ogTitle) {
-				ogObject.ogTitle = $('title').text();
+			if (!ogObject.title) {
+				ogObject.title = $('title').text();
 			}
 
 			callback(null, ogObject);
