@@ -19,6 +19,7 @@ exports.getInfo = function(options, callback){
 		if(inputUrlFlag && inputUrlFlag == true && inputTimeoutFlag && inputTimeoutFlag == true){
 			options.url = inputUrl;
 			options.timeout = inputTimeout;
+			options.encoding = 'utf8';
 			that.getOG(options, function(err, results) {
 				if(results && results.success){
 					returnResule = {
