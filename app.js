@@ -128,51 +128,58 @@ exports.getOG = function(options, callback) {
 			//able to get og info
 			ogObject.success = 'true';
 
-			keys.forEach(function(key){
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:title'){
-					ogObject.ogTitle = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:type'){
-					ogObject.ogType = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:image'){
-					ogObject.ogImage = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:url'){
-					ogObject.ogUrl = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:audio'){
-					ogObject.ogAudio = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:description'){
-					ogObject.ogDescription = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:determiner'){
-					ogObject.ogDeterminer = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale'){
-					ogObject.ogLocale = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale:alternate'){
-					ogObject.ogLocaleAlternate = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:site_name'){
-					ogObject.ogSiteName = meta[key].attribs.content;
-				};
-				if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:video'){
-					ogObject.ogVideo = meta[key].attribs.content;
-				};
+			keys.forEach(function (key) {
+				if (!meta[key].attribs) return;
+				var attrs = meta[key].attribs;
+
+				if (attrs.property) {
+					if (attrs.property === 'og:title') {
+						ogObject.ogTitle = meta[key].attribs.content;
+					};
+
+					if (attrs.property === 'og:type') {
+						ogObject.ogType = meta[key].attribs.content;
+					};
+
+					if (attrs.property === 'og:image') {
+						ogObject.ogImage = meta[key].attribs.content;
+					};
+
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:url'){
+						ogObject.ogUrl = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:audio'){
+						ogObject.ogAudio = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:description'){
+						ogObject.ogDescription = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:determiner'){
+						ogObject.ogDeterminer = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale'){
+						ogObject.ogLocale = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:locale:alternate'){
+						ogObject.ogLocaleAlternate = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:site_name'){
+						ogObject.ogSiteName = meta[key].attribs.content;
+					};
+					if(meta[key].attribs && meta[key].attribs.property && meta[key].attribs.property === 'og:video'){
+						ogObject.ogVideo = meta[key].attribs.content;
+					};
+				}
+
+				if (!ogObject.ogDescription && attrs.name == 'description') {
+					ogObject.ogDescription = attrs.content;
+				}
 			});
 
-			// Get title tag if og title not provided
+			// Get title tag if og:title not provided
 			if (!ogObject.ogTitle) {
-				$('title').map(function(i, info) {
-				 	var title = info.children[0].data;
-				 	ogObject.ogTitle = title;
-				});
+				ogObject.ogTitle = $('title').text();
 			}
-
-			// TODO: get meta description
 
 			callback(null, ogObject);
 		};
