@@ -163,12 +163,18 @@ exports.getOG = function(options, callback) {
 					ogObject.ogVideo = meta[key].attribs.content;
 				};
 			});
-			//example of how to get the title tag 
-			// $('title').map(function(i, info) {
-			// 	console.log('title:',info.children[0].data);
-			// });
-			//console.log('ogObject',ogObject);
-			callback(null,ogObject);
+
+			// Get title tag if og title not provided
+			if (!ogObject.ogTitle) {
+				$('title').map(function(i, info) {
+				 	var title = info.children[0].data;
+				 	ogObject.ogTitle = title;
+				});
+			}
+
+			// TODO: get meta description
+
+			callback(null, ogObject);
 		};
 	});
 };
