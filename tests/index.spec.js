@@ -176,6 +176,7 @@ describe('GET OG', function (done) {
 		app(options, function (err, result) {
 			expect(result.success).to.be(true);
 			expect(result.title).to.be('EKONOM: Mafie by tu nepřežila, Češi všechno vyžvaní, tvrdí advokát Sokol');
+			done();
 		});
 	})
 });
