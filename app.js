@@ -1,5 +1,6 @@
-var request = require('request');
 var cheerio = require('cheerio');
+var Iconv = require('iconv').Iconv;
+var request = require('request');
 
 module.exports = function (options, callback) {
 	exports.getInfo(options, function (err, results) {
@@ -71,6 +72,13 @@ exports.getOpenGraph = function(options, callback) {
 		} else if (!body) {
 			callback(new Error('Page is empty'));
 		} else {
+			var charset = body.match(/charset=([a-zA-Z0-9-]+)/);
+
+			if (charset) {
+				var iconv = new Iconv(charset[1], 'UTF8//IGNORE');
+				body = iconv.convert(new Buffer(body, 'binary')).toString();
+			}
+
 			var $ = cheerio.load(body),
 				meta = $('meta'),
 				keys = Object.keys(meta),
