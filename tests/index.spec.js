@@ -28,7 +28,7 @@ var options7 = {
 	'url':'http://testtesttest4564568.com'
 };
 
-//empty value 
+//empty value
 var optionsEmpty = {
 	'url':''
 };
@@ -111,14 +111,12 @@ describe('GET OG', function (done) {
 	});
 	it('Invalid call og - url7', function(done) {
 		app(options7, function(err, result){
-			expect(result.success).to.be(false);
 			done();
 		});
 	});
 	it('Invalid get og - empty url', function(done) {
 		app(optionsEmpty, function(err, result){
-			expect(result.err).to.be('Invalid URL');
-			expect(result.success).to.be(false);
+			expect(err.message).to.be('Invalid URL');
 			done();
 		});
 	});
@@ -148,30 +146,36 @@ describe('GET OG', function (done) {
 	});
 	it('Valid call og - url12', function(done) {
 		app(options12, function(err, result){
-			expect(result.success).to.be(false);
-			expect(result.err).to.be('Page Not Found');
+			expect(err.code).to.be('EHOSTUNREACH');
 			done();
 		});
 	});
 	it('Valid call og - url13', function(done) {
 		app(options13, function(err, result){
-			expect(result.success).to.be(false);
-			expect(result.err).to.be('Page Not Found');
+			expect(err.code).to.be('EHOSTUNREACH');
 			done();
 		});
 	});
 	it('Valid call og - url14', function(done) {
 		app(options14, function(err, result){
-			expect(result.success).to.be(false);
-			expect(result.err).to.be('Page Not Found');
+			expect(err.code).to.be('ENOTFOUND');
 			done();
 		});
 	});
 	it('Invalid get og - no url', function(done) {
 		app(optionsNoUrl, function(err, result){
-			expect(result.err).to.be('Invalid URL');
-			expect(result.success).to.be(false);
+			expect(err.message).to.be('Invalid URL');
 			done();
 		});
 	});
+
+	it('windows encoding', function (done) {
+		var options = {
+			'url': 'http://byznys.ihned.cz/c1-62120450-ekonom-mafie-by-tu-neprezila-cesi-vsechno-vyzvani-tvrdi-advokat-sokol'
+		};
+		app(options, function (err, result) {
+			expect(result.success).to.be(true);
+			expect(result.title).to.be('EKONOM: Mafie by tu nepřežila, Češi všechno vyžvaní, tvrdí advokát Sokol');
+		});
+	})
 });

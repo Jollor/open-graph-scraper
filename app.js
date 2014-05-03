@@ -1,9 +1,9 @@
-var request = require('request'),
-	cheerio = require('cheerio');
+var request = require('request');
+var cheerio = require('cheerio');
 
-module.exports = function(options, callback){
-	exports.getInfo(options, function(err,results){
-		callback(err,results);
+module.exports = function (options, callback) {
+	exports.getInfo(options, function (err, results) {
+		callback(err, results);
 	});
 };
 
@@ -12,88 +12,36 @@ module.exports = function(options, callback){
  * @param string url - user input of url
  * @param function callback
  */
-exports.getInfo = function(options, callback){
-	var error = null, returnResule = {};
-	that = this;
-	this.validateVars(options.url, options.timeout, function(inputUrlFlag, inputUrl, inputTimeoutFlag, inputTimeout){
-		if(inputUrlFlag && inputUrlFlag == true && inputTimeoutFlag && inputTimeoutFlag == true){
-			options.url = inputUrl;
-			options.timeout = inputTimeout;
-			options.encoding = 'utf8';
-			that.getOG(options, function(err, results) {
-				if(results && results.success){
-					returnResule = {
-						data: results,
-						success: true
-					};
-				}else{
-					if(err && (err.code == 'ENOTFOUND' || err.code == 'EHOSTUNREACH')){
-						error = 'err';
-						returnResule = {
-							err: 'Page Not Found',
-							success: false
-						};
-					} else if(err && err.code == 'ETIMEDOUT'){
-						error = 'err';
-						returnResule = {
-							err: 'Time Out',
-							success: false
-						};
-					}else{
-						error = 'err';
-						returnResule = {
-							err: 'Page Not Found',
-							success: false
-						};
-					}
-				};
-				callback(error,returnResule);
-			});
-		}else{
-			callback('err',{
-				success: false,
-				err: 'Invalid URL'
-			});
-		};
+exports.getInfo = function (options, callback) {
+	var error = null;
+	var data = {};
+	var that = this;
+
+	if (!options.url) {
+		return callback(new Error('Invalid URL'));
+	}
+
+	options.url = this.validateUrl(options.url);
+	options.timeout = !isNaN(options.timeout) ? options.timeout : 2000;
+	options.encoding = options.encoding || 'utf8';
+
+	that.getOpenGraph(options, function (err, results) {
+		if (err) {
+			return callback(err);
+		}
+
+		callback(null, results);
 	});
 };
 
-/*
- * validate var
- * @param string var - user input
- * @param function callback
- */
-exports.validateVars = function(inputUrl, inputTimeout, callback) {
-	var returnInputUrl,returnInputUrlFlag,returnInputTimeout,returnInputTimeoutFlag;
-	if ( inputUrl == null || inputUrl.length < 1 || typeof inputUrl === 'undefined' || !inputUrl) {
-		returnInputUrlFlag = false;
-		returnInputUrl = '';
-	} else {
-		returnInputUrlFlag = true;
-		returnInputUrl = this.validateUrl(inputUrl)
-	};
-	if ( inputTimeout == null || inputTimeout.length < 1 || typeof inputTimeout === 'undefined' || !inputTimeout) {
-		returnInputTimeoutFlag = true;
-		returnInputTimeout = 2000; //time default to 2000ms
-	} else {
-		if(this.validateTimeout(inputTimeout)){
-			returnInputTimeoutFlag = true;
-			returnInputTimeout = inputTimeout;
-		} else {
-			returnInputTimeoutFlag = true;
-			returnInputTimeout = 2000; //time default to 2000ms
-		}
-	};
-	callback(returnInputUrlFlag, returnInputUrl, returnInputTimeoutFlag, returnInputTimeout)
-};
 
 /*
  * validate url - all urls must have http:// in front of them
  * @param string var - the url we want to scrape
  * @param function callback
  */
-exports.validateUrl = function(inputUrl) {
-	if(!/^(f|ht)tps?:\/\//i.test(inputUrl)) {
+exports.validateUrl = function (inputUrl) {
+	if (!/^(f|ht)tps?:\/\//i.test(inputUrl)) {
 		inputUrl = "http://" + inputUrl;
 	};
 	return inputUrl;
@@ -116,10 +64,12 @@ exports.validateTimeout = function(inputTimeout) {
  * @param string url - the url we want to scrape
  * @param function callback
  */
-exports.getOG = function(options, callback) {
+exports.getOpenGraph = function(options, callback) {
 	request(options, function(err, response, body) {
-		if(err){
+		if (err) {
 			callback(err, null);
+		} else if (!body) {
+			callback(new Error('Page is empty'));
 		} else {
 			var $ = cheerio.load(body),
 				meta = $('meta'),
@@ -127,7 +77,7 @@ exports.getOG = function(options, callback) {
 				ogObject = {};
 
 			//able to get og info
-			ogObject.success = 'true';
+			ogObject.success = true;
 
 			keys.forEach(function (key) {
 				if (!meta[key].attribs) return;
