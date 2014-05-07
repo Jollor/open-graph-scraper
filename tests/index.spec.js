@@ -66,7 +66,8 @@ var options12 = {
 var optionsNoUrl = { };
 
 describe('GET OG', function (done) {
-	this.timeout(3000); //shoudl wait atleast 3secs before failing
+	this.timeout(7000); //shoudl wait atleast 3secs before failing
+
 	it('Valid call og - url1', function(done) {
 		app(options1, function(err, result){
 			expect(err).to.be(null);
@@ -181,11 +182,10 @@ describe('GET OG', function (done) {
 	});
 
 	it('should handle NYTimes article', function (done) {
-		var options= {
-			'url': 'http://www.nytimes.com/2014/05/07/world/asia/local-policies-help-an-indian-candidate-narendra-modi-trying-to-go-national.html?hp&_r=0'
+		var options = {
+			'url': 'http://www.nytimes.com/2014/05/08/technology/the-unlikely-ascent-of-jack-ma-alibabas-founder.html?ref=technology'
 		};
 		app(options, function (err, result) {
-			console.log('ny', err, result);
 			expect(result.success).to.be(true);
 			done();
 		});
