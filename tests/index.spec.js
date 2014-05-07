@@ -178,5 +178,16 @@ describe('GET OG', function (done) {
 			expect(result.title).to.be('EKONOM: Mafie by tu nepřežila, Češi všechno vyžvaní, tvrdí advokát Sokol');
 			done();
 		});
-	})
+	});
+
+	it('should handle NYTimes article', function (done) {
+		var options= {
+			'url': 'http://www.nytimes.com/2014/05/07/world/asia/local-policies-help-an-indian-candidate-narendra-modi-trying-to-go-national.html?hp&_r=0'
+		};
+		app(options, function (err, result) {
+			console.log('ny', err, result);
+			expect(result.success).to.be(true);
+			done();
+		});
+	});
 });

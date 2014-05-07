@@ -25,6 +25,7 @@ exports.getInfo = function (options, callback) {
 	options.url = this.validateUrl(options.url);
 	options.timeout = !isNaN(options.timeout) ? options.timeout : 2000;
 	options.encoding = 'binary';
+	options.maxRedirects = 20;
 
 	that.getOpenGraph(options, function (err, results) {
 		if (err) {
