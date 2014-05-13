@@ -190,4 +190,15 @@ describe('GET OG', function (done) {
 			done();
 		});
 	});
+
+	it('should handle not specified encoding', function (done) {
+		var options = {
+			'url': 'mngsocial.com/cs/blog/84-facebook-nejlepsi-stranky'
+		};
+		app(options, function (err, result) {
+			expect(result.success).to.be(true);
+			expect(result.title).to.be('Stránky, které stojí za "líbíka" - Manage Social');
+			done();
+		})
+	});
 });

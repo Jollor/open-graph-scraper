@@ -74,10 +74,10 @@ exports.getOpenGraph = function(options, callback) {
 		} else if (!body) {
 			callback(new Error('Page is empty'));
 		} else {
-			var charset = body.match(/charset=([a-zA-Z0-9-]+)/);
-
-			if (charset) {
-				var iconv = new Iconv(charset[1], 'UTF8//IGNORE');
+			var content_type = response.headers['content-type'].split('; ');
+			if (content_type.length > 1)  {
+				var charset = content_type[1].split('=')[1];
+				var iconv = new Iconv(charset, 'UTF8//IGNORE');
 				body = iconv.convert(new Buffer(body, 'binary')).toString();
 			}
 
