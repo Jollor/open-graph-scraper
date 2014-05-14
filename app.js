@@ -8,6 +8,7 @@ module.exports = function (options, callback) {
 	});
 };
 
+
 /*
  * get info
  * @param string url - user input of url
@@ -50,6 +51,7 @@ exports.validateUrl = function (inputUrl) {
 	return inputUrl;
 };
 
+
 /*
  * validate timeout - how long should we wait for a request
  * @param number var - the time we want to wait
@@ -61,6 +63,33 @@ exports.validateTimeout = function(inputTimeout) {
 	};
 	return true;
 };
+
+
+exports.parseCharset = function(response, body) {
+	var charset;
+
+	// http content-type header
+	if (response.headers['content-type']) {
+		var content_type = response.headers['content-type'].split('; ');
+		if (content_type.length > 1)  {
+			charset = content_type[1].split('=')[1];
+		}
+	}
+
+	// meta content-type and meta charset
+	if (!charset) {
+			var matches = body.match(/charset="?([a-zA-Z0-9-]+)/);
+			if (matches && matches.length > 1) {
+				charset = matches[1];
+			}
+	}
+
+	// default charset
+	charset = charset || 'utf-8';
+
+	return charset;
+};
+
 
 /*
  * getOG - scrape that url!
@@ -74,12 +103,9 @@ exports.getOpenGraph = function(options, callback) {
 		} else if (!body) {
 			callback(new Error('Page is empty'));
 		} else {
-			var content_type = response.headers['content-type'].split('; ');
-			if (content_type.length > 1)  {
-				var charset = content_type[1].split('=')[1];
-				var iconv = new Iconv(charset, 'UTF8//IGNORE');
-				body = iconv.convert(new Buffer(body, 'binary')).toString();
-			}
+			var charset = exports.parseCharset(response, body);
+			var iconv = new Iconv(charset, 'UTF8//IGNORE');
+			body = iconv.convert(new Buffer(body, 'binary')).toString();
 
 			var $ = cheerio.load(body),
 				meta = $('meta'),

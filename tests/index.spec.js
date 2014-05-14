@@ -191,7 +191,7 @@ describe('GET OG', function (done) {
 		});
 	});
 
-	it('should handle not specified encoding', function (done) {
+	it('should handle encoding specified only by http headers', function (done) {
 		var options = {
 			'url': 'mngsocial.com/cs/blog/84-facebook-nejlepsi-stranky'
 		};
@@ -201,4 +201,28 @@ describe('GET OG', function (done) {
 			done();
 		})
 	});
+
+	it('should handle encoding specified only by meta content-type', function (done) {
+		var options = {
+			'url': 'http://zdravinaroda.cz/blog/vitamin-d-je-dulezitejsi-nez-jsme-mysleli'
+		};
+		app(options, function (err, result) {
+			expect(result.success).to.be(true);
+			expect(result.title).to.be('Vitamín D je důležitější, než jsme mysleli');
+			done();
+		})
+	});
+
+	/*
+	it('should parse charset from http headers', function (done) {
+		var response = {
+			headers: {
+				'content-type': 'text/html; charset=windows-1250'
+			}
+		};
+		var charset = app.parseCharset(response, '');
+		expect(charset).to.be('windows-1250');
+		done();
+	});
+	*/
 });
