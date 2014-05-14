@@ -1,7 +1,8 @@
-var OpenGraphScraper = require('../app'),
+var OpenGraphScraper = require('../lib/OpenGraphScraper'),
 	expect = require('expect.js');
 
 var app = new OpenGraphScraper();
+var ogs = require('../app');
 
 //test url - this has alot of OG info
 var options1 = {
@@ -244,5 +245,15 @@ describe('GET OG', function (done) {
 		expect(charset).to.be('WINDOWS-1250');
 
 		done();
+	});
+
+	it('final test to be sure export is working', function (done) {
+		var options = {
+			'url': 'http://google.com'
+		};
+		ogs(options, function (err, result) {
+			expect(result.success).to.be(true);
+			done();
+		})
 	});
 });
