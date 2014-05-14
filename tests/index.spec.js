@@ -1,5 +1,7 @@
-var app = require('../app'),
+var OpenGraphScraper = require('../app'),
 	expect = require('expect.js');
+
+var app = new OpenGraphScraper();
 
 //test url - this has alot of OG info
 var options1 = {
@@ -69,102 +71,102 @@ describe('GET OG', function (done) {
 	this.timeout(7000); //shoudl wait atleast 3secs before failing
 
 	it('Valid call og - url1', function(done) {
-		app(options1, function(err, result){
+		app.getInfo(options1, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url2', function(done) {
-		app(options2, function(err, result){
+		app.getInfo(options2, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url3', function(done) {
-		app(options3, function(err, result){
+		app.getInfo(options3, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url4', function(done) {
-		app(options4, function(err, result){
+		app.getInfo(options4, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url5', function(done) {
-		app(options5, function(err, result){
+		app.getInfo(options5, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url6', function(done) {
-		app(options6, function(err, result){
+		app.getInfo(options6, function(err, result){
 			expect(err).to.be(null);
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Invalid call og - url7', function(done) {
-		app(options7, function(err, result){
+		app.getInfo(options7, function(err, result){
 			done();
 		});
 	});
 	it('Invalid get og - empty url', function(done) {
-		app(optionsEmpty, function(err, result){
+		app.getInfo(optionsEmpty, function(err, result){
 			expect(err.message).to.be('Invalid URL');
 			done();
 		});
 	});
 		it('Valid call og - url8', function(done) {
-		app(options8, function(err, result){
+		app.getInfo(options8, function(err, result){
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url9', function(done) {
-		app(options9, function(err, result){
+		app.getInfo(options9, function(err, result){
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url10', function(done) {
-		app(options10, function(err, result){
+		app.getInfo(options10, function(err, result){
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url11', function(done) {
-		app(options11, function(err, result){
+		app.getInfo(options11, function(err, result){
 			expect(result.success).to.be(true);
 			done();
 		});
 	});
 	it('Valid call og - url12', function(done) {
-		app(options12, function(err, result){
+		app.getInfo(options12, function(err, result){
 			expect(err.code).to.be('EHOSTUNREACH');
 			done();
 		});
 	});
 	it('Valid call og - url13', function(done) {
-		app(options13, function(err, result){
+		app.getInfo(options13, function(err, result){
 			expect(err.code).to.be('EHOSTUNREACH');
 			done();
 		});
 	});
 	it('Valid call og - url14', function(done) {
-		app(options14, function(err, result){
+		app.getInfo(options14, function(err, result){
 			expect(err.code).to.be('ENOTFOUND');
 			done();
 		});
 	});
 	it('Invalid get og - no url', function(done) {
-		app(optionsNoUrl, function(err, result){
+		app.getInfo(optionsNoUrl, function(err, result){
 			expect(err.message).to.be('Invalid URL');
 			done();
 		});
@@ -174,7 +176,7 @@ describe('GET OG', function (done) {
 		var options = {
 			'url': 'http://byznys.ihned.cz/c1-62120450-ekonom-mafie-by-tu-neprezila-cesi-vsechno-vyzvani-tvrdi-advokat-sokol'
 		};
-		app(options, function (err, result) {
+		app.getInfo(options, function (err, result) {
 			expect(result.success).to.be(true);
 			expect(result.title).to.be('EKONOM: Mafie by tu nepřežila, Češi všechno vyžvaní, tvrdí advokát Sokol');
 			done();
@@ -185,7 +187,7 @@ describe('GET OG', function (done) {
 		var options = {
 			'url': 'http://www.nytimes.com/2014/05/08/technology/the-unlikely-ascent-of-jack-ma-alibabas-founder.html?ref=technology'
 		};
-		app(options, function (err, result) {
+		app.getInfo(options, function (err, result) {
 			expect(result.success).to.be(true);
 			done();
 		});
@@ -195,7 +197,7 @@ describe('GET OG', function (done) {
 		var options = {
 			'url': 'mngsocial.com/cs/blog/84-facebook-nejlepsi-stranky'
 		};
-		app(options, function (err, result) {
+		app.getInfo(options, function (err, result) {
 			expect(result.success).to.be(true);
 			expect(result.title).to.be('Stránky, které stojí za "líbíka" - Manage Social');
 			done();
@@ -206,23 +208,41 @@ describe('GET OG', function (done) {
 		var options = {
 			'url': 'http://zdravinaroda.cz/blog/vitamin-d-je-dulezitejsi-nez-jsme-mysleli'
 		};
-		app(options, function (err, result) {
+		app.getInfo(options, function (err, result) {
 			expect(result.success).to.be(true);
 			expect(result.title).to.be('Vitamín D je důležitější, než jsme mysleli');
 			done();
 		})
 	});
 
-	/*
 	it('should parse charset from http headers', function (done) {
 		var response = {
 			headers: {
 				'content-type': 'text/html; charset=windows-1250'
 			}
 		};
-		var charset = app.parseCharset(response, '');
+		var charset = app.parseCharset_(response, '');
 		expect(charset).to.be('windows-1250');
 		done();
 	});
-	*/
+
+	it('should parse charset from meta content-type', function (done) {
+		var body = '<meta http-equiv="content-type" content="text/html; charset=WINDOWS-1250" />';
+		var charset = app.parseCharset_({}, body);
+		expect(charset).to.be('WINDOWS-1250');
+		done();
+	});
+
+	it('should parse charset from meta charset', function (done) {
+		var charset = app.parseCharset_({}, '<meta charset="WINDOWS-1250" />');
+		expect(charset).to.be('WINDOWS-1250');
+
+		charset = app.parseCharset_({}, '<META CHARSET="WINDOWS-1250" />');
+		expect(charset).to.be('WINDOWS-1250');
+
+		charset = app.parseCharset_({}, "<META CHARSET='WINDOWS-1250' />");
+		expect(charset).to.be('WINDOWS-1250');
+
+		done();
+	});
 });
