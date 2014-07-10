@@ -256,4 +256,17 @@ describe('GET OG', function (done) {
 			done();
 		})
 	});
+
+	it('should parse og:image and compute dimensions', function (done) {
+		var options = {
+			'url': 'http://www.barchick.com/find-a-bar/london/the-imperial-durbar-2'
+		};
+		ogs(options, function (err, result) {
+			expect(err).to.be(null);
+			expect(result.image).to.equal('http://www.barchick.com/wp-content/themes/barchick-v3/scripts/timthumb.php?w=90&src=http://www.barchick.com/wp-content/uploads/2014/07/imperialdurbar.image3_.jpg');
+			expect(result.image_dimensions.width).to.equal(90);
+			expect(result.image_dimensions.height).to.equal(45);
+			done();
+		})
+	});
 });

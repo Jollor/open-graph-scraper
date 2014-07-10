@@ -12,7 +12,8 @@
 	"dependencies": {
 		"request": "2.34.0",
 		"cheerio": "0.15.0",
-		"iconv": "~2.0.7"
+		"iconv": "~2.0.7",
+		"image-size": "0.3.x"
 	},
 	"devDependencies": {
 		"expect.js": "0.3.1",
