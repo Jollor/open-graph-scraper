@@ -257,7 +257,7 @@ describe('GET OG', function (done) {
 		})
 	});
 
-	it('should parse og:image and compute dimensions', function (done) {
+	xit('should parse og:image and compute dimensions', function (done) {
 		var options = {
 			'url': 'http://www.barchick.com/find-a-bar/london/the-imperial-durbar-2'
 		};
@@ -266,6 +266,18 @@ describe('GET OG', function (done) {
 			expect(result.image).to.equal('http://www.barchick.com/wp-content/themes/barchick-v3/scripts/timthumb.php?w=90&src=http://www.barchick.com/wp-content/uploads/2014/07/imperialdurbar.image3_.jpg');
 			expect(result.image_dimensions.width).to.equal(90);
 			expect(result.image_dimensions.height).to.equal(45);
+			done();
+		})
+	});
+
+	xit('should not compute dimensions for not existing image', function (done) {
+		var options = {
+			'url': 'http://mngsocial.com/cs/blog/103-jak-napsat-titulek'
+		};
+		ogs(options, function (err, result) {
+			expect(err).to.be(null);
+			expect(result.image).to.equal('http://mngsocial.com/cs/blog/103-jak-napsat-titulek/admin/image/detail/33');
+			expect(result.image_dimensions).to.equal(undefined);
 			done();
 		})
 	});
