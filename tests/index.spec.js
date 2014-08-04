@@ -281,4 +281,14 @@ describe('GET OG', function (done) {
 			done();
 		})
 	});
+
+	it('images should not be parsed', function (done) {
+		var options = {
+			'url': 'http://upload.wikimedia.org/wikipedia/commons/b/b4/Albino_redwood.jpg'
+		};
+		ogs(options, function (err, result) {
+			expect(err).to.eql(new Error('This link has no metadata'));
+			done();
+		});
+	});
 });
