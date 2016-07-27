@@ -162,7 +162,7 @@ describe('GET OG', function (done) {
 	});
 	it('Valid call og - url14', function(done) {
 		app.getInfo(options14, function(err, result){
-			expect(err.code).to.be('ENOTFOUND');
+			expect(err.code).to.be('ETIMEDOUT');
 			done();
 		});
 	});
