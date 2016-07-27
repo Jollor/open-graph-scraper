@@ -190,6 +190,7 @@ describe('GET OG', function (done) {
 		};
 		app.getInfo(options, function (err, result) {
 			expect(result.success).to.be(true);
+			expect(result.url).to.be('http://www.nytimes.com/2014/05/08/technology/the-unlikely-ascent-of-jack-ma-alibabas-founder.html');
 			done();
 		});
 	});
@@ -288,6 +289,17 @@ describe('GET OG', function (done) {
 		};
 		ogs(options, function (err, result) {
 			expect(err).to.eql(new Error('This link has no metadata'));
+			done();
+		});
+	});
+
+	it('fix missing protocol in url meta tag', function (done) {
+		app.getInfo({
+			'url': 'https://www.sport.cz/moto/formule1/clanek/796024-ve-ferrari-skoncil-technicky-reditel-allison.html#hp-artcl'
+		}, function (err, result) {
+			expect(err).to.be(null);
+			expect(result.success).to.be(true);
+			expect(result.url).to.be('http://www.sport.cz/moto/formule1/clanek/796024-ve-ferrari-skoncil-technicky-reditel-allison.html');
 			done();
 		});
 	});
